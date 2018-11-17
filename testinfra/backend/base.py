@@ -20,6 +20,8 @@ import pipes
 import subprocess
 import warnings
 
+from six.moves import urllib
+
 import testinfra.modules
 import testinfra.utils
 
@@ -217,6 +219,11 @@ class BaseBackend(object):
                 user, password = user.split(':', 1)
         if ':' in name:
             name, port = name.split(':', 1)
+        name = urllib.parse.unquote(name)
+        if user is not None:
+            user = urllib.parse.unquote(user)
+        if password is not None:
+            password = urllib.parse.unquote(password)
         return HostSpec(name, port, user, password)
 
     @staticmethod
